@@ -96,7 +96,7 @@ public class MeEditorHelper  {
 	/// <value>The output res path.</value>
 	public static string OUTPUT_RES_PATH{
 		get{
-			return OUTPUT_ROOT_PATH+"/res";
+			return OUTPUT_ROOT_PATH+"/res/me/";
 		}
 	}
 

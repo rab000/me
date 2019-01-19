@@ -1,10 +1,10 @@
 fileFormatVersion: 2
 guid: 20c54567027744014829910ff47cb5d0
-timeCreated: 1546885252
+timeCreated: 1547896003
 licenseType: Pro
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 11400000
   userData: 
-  assetBundleName: 
-  assetBundleVariant: 
+  assetBundleName: scn/scndata
+  assetBundleVariant: n

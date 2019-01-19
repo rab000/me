@@ -23,8 +23,10 @@ public class MeEditor : MonoBehaviour {
 		//设置scnData BundleName
 		SetScnBundleName ();
 
+		//TODO 平台处理
 		//打bundle
-		BuildPipeline.BuildAssetBundles("path:",BuildAssetBundleOptions.None,BuildTarget.StandaloneOSXIntel64);
+		//nafio info 生成的bundle的名称，就取决于MeEditorHelper.OUTPUT_RES_PATH中最后一个文件夹的名称，比如这里就是me.manifest
+		BuildPipeline.BuildAssetBundles(MeEditorHelper.OUTPUT_RES_PATH,BuildAssetBundleOptions.None,BuildTarget.StandaloneWindows64);
 
 		AssetDatabase.Refresh();
 
@@ -57,7 +59,7 @@ public class MeEditor : MonoBehaviour {
 
 				string fileNameWithoutExt = EditorHelper.GetFileNameFromPath (filePath,true);
 
-				string bundleName = "res/map" + mapName + "/" + fileNameWithoutExt ;
+				string bundleName = "map/" + mapName + "/" + fileNameWithoutExt ;
 
 				EditorHelper.SetAssetBundleName (reletiveFilePath, bundleName,EditorHelper.BUNDLE_EXT_NAME);
 
@@ -85,7 +87,7 @@ public class MeEditor : MonoBehaviour {
 
 			string fileNameWithoutExt = EditorHelper.GetFileNameFromPath (objPath,true);
 
-			string bundleName = "res/objs/" + fileNameWithoutExt;
+			string bundleName = "objs/" + fileNameWithoutExt;
 
 			EditorHelper.SetAssetBundleName (reletiveObjsPath, bundleName,EditorHelper.BUNDLE_EXT_NAME);
 
@@ -109,7 +111,7 @@ public class MeEditor : MonoBehaviour {
 
 			string fileNameWithoutExt = EditorHelper.GetFileNameFromPath (scnAssetPath,true);
 
-			string bundleName = "res/scn/" + fileNameWithoutExt;
+			string bundleName = "scn/" + fileNameWithoutExt;
 
 			EditorHelper.SetAssetBundleName (reletiveScnAssetPath, bundleName,EditorHelper.BUNDLE_EXT_NAME);
 
@@ -143,7 +145,7 @@ public class MeEditor : MonoBehaviour {
 		string scnName = scnTypeAndName[1];
 
 		//创建场景临时对象
-		string scnPrefabPath = scnSubFolderPath+"scn.prefab";
+		string scnPrefabPath = scnSubFolderPath+"/scn.prefab";
 		if (!EditorHelper.BeFileExist (scnPrefabPath)) {
 			Debug.LogError ("MeEditor.FillOneScnData 未找到scnPrefa  path:"+scnPrefabPath+" 填充场景数据失败");
 			return;
@@ -156,6 +158,7 @@ public class MeEditor : MonoBehaviour {
 
 		FillDiffScnData (scnType,scnName,scnSubFolderPath,scnGo);
 
+		DestroyImmediate(scnGo);
 	}
 
 	static void FillDiffScnData(string scnType,string scnName,string scnSubFolderPath,GameObject scnPrefab){
@@ -187,31 +190,42 @@ public class MeEditor : MonoBehaviour {
 		Tower[] towers = objsTrm.GetComponentsInChildren<Tower> ();
 
 		//获取或创建ScnData
-		string scnDataAssetPath = scnSubFolderPath + "scnData.asset";
+		string scnDataAssetPath = scnSubFolderPath + "/scnData.asset";
 
-		Scn3CData sd = null;
+		string scnDataAssetReletivePath = EditorHelper.ChangeToRelativePath (scnDataAssetPath);
 
-		if (!EditorHelper.BeFileExist (scnDataAssetPath)) 
-		{
-			sd = ScriptableHelper.CreateOrReplaceAsset<Scn3CData> (sd,scnDataAssetPath);
-		} 
-		else 
-		{
-			sd = AssetDatabase.LoadAssetAtPath<Scn3CData> (scnDataAssetPath);
-		}
 
-		sd.ScnName = scnName;
-
-		sd.MapName = mapName;
-
-		sd.TowerDataList = new List<TowerData> ();
-
+		Scn3CData scn3CData = new Scn3CData();
+		scn3CData.ScnName = scnName;
+		scn3CData.MapName = mapName;
+		scn3CData.TowerDataList = new List<TowerData> ();
 		for (int i = 0; i < towers.Length; i++) {
 			TowerData td = new TowerData ();
 			td.Camp = towers[i].Camp;
 			td.Pos = towers [i].transform.position;
 			td.Priority = towers [i].Priority;
-			sd.TowerDataList.Add (td);
+			scn3CData.TowerDataList.Add (td);
+		}
+
+		if (!EditorHelper.BeFileExist (scnDataAssetPath)) 
+		{
+			Debug.LogError ("MeEditor.FillScnData3C scnData 不存在，创建新数据文件 path:"+scnDataAssetPath+" ");
+			scn3CData = ScriptableHelper.CreateOrReplaceAsset<Scn3CData> (scn3CData,scnDataAssetReletivePath);
+		} 
+		else 
+		{
+			Debug.LogError ("MeEditor.FillScnData3C scnData存在，读取数据文件,判断是否有数据变更，有就覆盖数据  path:"+scnDataAssetPath);
+			var oldScn3CData = AssetDatabase.LoadAssetAtPath<Scn3CData> (scnDataAssetReletivePath);
+			bool bSame = Scn3CData.BeSame(scn3CData,oldScn3CData);
+
+			if (!bSame) 
+			{
+				oldScn3CData.ScnName = scn3CData.ScnName;
+				oldScn3CData.MapName = scn3CData.MapName;
+				oldScn3CData.TowerDataList = new List<TowerData> ();
+				oldScn3CData.TowerDataList.AddRange (scn3CData.TowerDataList.ToArray());
+			}
+
 		}
 
 	}
