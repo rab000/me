@@ -17,6 +17,13 @@ using Object = UnityEngine.Object;
 /// </summary>
 public static class EditorHelper{
 
+	/// <summary>
+	/// 生成bundle文件后缀名
+	/// </summary>
+	/// <value>The name of the suffix.</value>
+	public static string ABSuffixName{
+		get {return ".n"; }	
+	}
 
 	#region 编辑器路径
 	/// <summary>
@@ -55,15 +62,58 @@ public static class EditorHelper{
 	}
 
 
+
+
 	#endregion
 
+	#region 编辑器输出路径
 
+	/// <summary>
+	/// 输出ab根目录
+	/// </summary>
+	/// <value>The output root path.</value>
+	public static string OUTPUT_ROOT_PATH{
+		get{
+			return EditorHelper.GetParentFolderPath(Application.dataPath)+"/data";
+		}
+	}
+
+	/// <summary>
+	/// AB资源输出目录
+	/// </summary>
+	/// <value>The output res path.</value>
+	public static string OUTPUT_RES_PATH{
+		get{
+			return OUTPUT_ROOT_PATH+"/res";
+		}
+	}
+
+
+
+	#endregion
 	
+	#region AssetDatabase相关
+	/// <summary>
+	/// 获取nityEngine.Object绝对路径
+	/// </summary>
+	/// <returns>The object absolute path.</returns>
+	/// <param name="obj">Object.</param>
+	public static string GetUnityObjAbsolutePath(UnityEngine.Object obj){
+		return AssetDatabase.GetAssetPath(obj);
+	}
 
+	/// <summary>
+	/// 载入Asset(路径是相对路径Asset/Neditro......)
+	/// </summary>
+	/// <returns>The asset at path.</returns>
+	/// <param name="path">Path.</param>
+	/// <param name="type">Type.</param>
+	public static Object LoadAssetAtPath(string path,Type type){
+		return AssetDatabase.LoadAssetAtPath(path,type);
+	}
+	#endregion
 
-
-	#region Directory相关
-
+	#region Folder
 	public static bool BeFolderExist(string folderPath){
 		return Directory.Exists (folderPath);
 	}
@@ -131,9 +181,10 @@ public static class EditorHelper{
 
 	#endregion
 
-	#region File相关
+	#region File
 
-	public static bool BeFileExist(string filePath){
+	public static bool BeFileExist(string filePath)
+	{
 		return File.Exists (filePath);
 	}
 
