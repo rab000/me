@@ -91,27 +91,7 @@ public static class EditorHelper{
 
 
 	#endregion
-	
-	#region AssetDatabase相关
-	/// <summary>
-	/// 获取nityEngine.Object绝对路径
-	/// </summary>
-	/// <returns>The object absolute path.</returns>
-	/// <param name="obj">Object.</param>
-	public static string GetUnityObjAbsolutePath(UnityEngine.Object obj){
-		return AssetDatabase.GetAssetPath(obj);
-	}
 
-	/// <summary>
-	/// 载入Asset(路径是相对路径Asset/Neditro......)
-	/// </summary>
-	/// <returns>The asset at path.</returns>
-	/// <param name="path">Path.</param>
-	/// <param name="type">Type.</param>
-	public static Object LoadAssetAtPath(string path,Type type){
-		return AssetDatabase.LoadAssetAtPath(path,type);
-	}
-	#endregion
 
 	#region Folder
 	public static bool BeFolderExist(string folderPath){
@@ -197,6 +177,34 @@ public static class EditorHelper{
 		Log.i ("EditorHelper","DeleteFileIfExists","待删除文件"+path+"存在，删除之");
 		File.Delete(path);
 	}
+
+	public static void BeFileSame(string file1Path,string file2Path)
+	{
+		//计算第一个文件的哈希值
+		var hash = System.Security.Cryptography.HashAlgorithm.Create();
+		var stream_1 = new System.IO.FileStream(file1Path, System.IO.FileMode.Open);
+		byte[] hashByte_1 = hash.ComputeHash(stream_1);
+		stream_1.Close();
+		//计算第二个文件的哈希值
+		var stream_2 = new System.IO.FileStream(file2Path, System.IO.FileMode.Open);
+		byte[] hashByte_2 = hash.ComputeHash(stream_2);
+		stream_2.Close();
+
+		//比较两个哈希值
+		if (BitConverter.ToString (hashByte_1) == BitConverter.ToString (hashByte_2))
+			Debug.LogError("两个文件相同");
+		else
+			Debug.LogError("两个文件不同");
+
+	}
+
+	public static int GetInstanceIDFromGUID(string guid)
+	{
+		System.Reflection.MethodInfo method = typeof( AssetDatabase).GetMethod("GetInstanceIDFromGUID"
+			, System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic);
+		int result =(int) method.Invoke(null,new object[]{ (object)guid});
+		return result;
+	}
 	#endregion
 
 	#region Path相关
@@ -242,11 +250,11 @@ public static class EditorHelper{
 	/// <summary>
 	/// 设置bundle打包标签
 	/// </summary>
-	/// <param name="path">Path.Asset相对路径</param>
+	/// <param name="path">Path.Asset相对路径（需要后缀名）</param>
 	/// <param name="bundleName">Bundle name.bundle名</param>
 	/// <param name="bundleVariant">Bundle variant.后缀</param>
 	public static void SetAssetBundleName(string path,string bundleName,string bundleVariant = "n"){
-		Debug.LogError ("SetAssetBundleName--->path:"+path);
+		//Debug.LogError ("SetAssetBundleName--->path:"+path);
 		if (path.EndsWith (".meta"))
 			return;
 
@@ -293,7 +301,7 @@ public static class EditorHelper{
 	}
 
 	/// <summary>
-	/// 
+	/// 注意如果copy文件夹不存在，则copy不生效
 	/// 需要相对路径,带文件名后缀
 	/// eg:
 	/// 移动mat
