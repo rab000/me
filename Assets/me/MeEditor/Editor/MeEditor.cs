@@ -28,6 +28,8 @@ public class MeEditor : MonoBehaviour {
 		//nafio info 生成的bundle的名称，就取决于MeEditorHelper.OUTPUT_RES_PATH中最后一个文件夹的名称，比如这里就是me.manifest
 		BuildPipeline.BuildAssetBundles(MeEditorHelper.OUTPUT_RES_PATH,BuildAssetBundleOptions.None,BuildTarget.StandaloneWindows64);
 
+		AssetDatabase.SaveAssets ();
+
 		AssetDatabase.Refresh();
 
 	}
@@ -214,17 +216,22 @@ public class MeEditor : MonoBehaviour {
 		} 
 		else 
 		{
-			Debug.LogError ("MeEditor.FillScnData3C scnData存在，读取数据文件,判断是否有数据变更，有就覆盖数据  path:"+scnDataAssetPath);
-			var oldScn3CData = AssetDatabase.LoadAssetAtPath<Scn3CData> (scnDataAssetReletivePath);
+			
+			Scn3CData oldScn3CData = AssetDatabase.LoadAssetAtPath<Scn3CData> (scnDataAssetReletivePath);
 			bool bSame = Scn3CData.BeSame(scn3CData,oldScn3CData);
-
+			Debug.LogError ("MeEditor.FillScnData3C scnData存在，读取数据文件,判断是否有数据变更，有就覆盖数据  path:"+scnDataAssetPath +" bSame:"+bSame);
 			if (!bSame) 
 			{
 				oldScn3CData.ScnName = scn3CData.ScnName;
 				oldScn3CData.MapName = scn3CData.MapName;
 				oldScn3CData.TowerDataList = new List<TowerData> ();
 				oldScn3CData.TowerDataList.AddRange (scn3CData.TowerDataList.ToArray());
+
+				Debug.LogError ("MeEditor.FillScnData3C scnName:"+oldScn3CData.ScnName+" mapName:"+oldScn3CData.MapName+" ListCount:"+oldScn3CData.TowerDataList.Count);
+
 			}
+
+
 
 		}
 
