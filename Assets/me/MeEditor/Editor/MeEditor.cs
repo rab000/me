@@ -100,22 +100,30 @@ public class MeEditor : MonoBehaviour {
 		//地图物体资源根路径
 		string scnRootPath = MeEditorHelper.SCN_PATH;
 
-		string[] scnsPath  = EditorHelper.GetSubFolderPaths(scnRootPath);	
+		string[] scnTypesFolderPath  = EditorHelper.GetSubFolderPaths(scnRootPath);	
 
-		int scnsNum = scnsPath.Length;
+		int scnTypesNum = scnTypesFolderPath.Length;
 
-		for (int i = 0; i < scnsNum; i++) 
+		for (int i = 0; i < scnTypesNum; i++) 
 		{
+			string scnType = EditorHelper.GetFileNameFromPath(scnTypesFolderPath [i],true);
+			
+			string[] scnsPath =  EditorHelper.GetSubFolderPaths(scnTypesFolderPath[i]);	
 
-			string scnAssetPath = scnsPath [i]+"/scnData.asset";
+			for (int j = 0; j < scnsPath.Length; j++)
+			{
+				string scnName = EditorHelper.GetFileNameFromPath(scnsPath [j],true);
 
-			string reletiveScnAssetPath = EditorHelper.ChangeToRelativePath (scnAssetPath);
+				string scnAssetPath = scnsPath [j]+"/scnData.asset";
 
-			string fileNameWithoutExt = EditorHelper.GetFileNameFromPath (scnAssetPath,true);
+				string reletiveScnAssetPath = EditorHelper.ChangeToRelativePath (scnAssetPath);
 
-			string bundleName = "scn/" + fileNameWithoutExt;
+				string fileNameWithoutExt = EditorHelper.GetFileNameFromPath (scnAssetPath,true);
 
-			EditorHelper.SetAssetBundleName (reletiveScnAssetPath, bundleName,EditorHelper.BUNDLE_EXT_NAME);
+				string bundleName = "scn/" +scnType+"/"+scnName +"/"+ fileNameWithoutExt;
+
+				EditorHelper.SetAssetBundleName (reletiveScnAssetPath, bundleName);
+			}
 
 		}
 
@@ -126,28 +134,40 @@ public class MeEditor : MonoBehaviour {
 	{
 		string scnRootPath = MeEditorHelper.SCN_PATH;
 
-		string[] scnsPath  = EditorHelper.GetSubFolderPaths(scnRootPath);	
+		string[] scnTypesFolderPath  = EditorHelper.GetSubFolderPaths(scnRootPath);	
 
-		int scnsNum = scnsPath.Length;
+		int scnTypesNum = scnTypesFolderPath.Length;
 
-		for (int i = 0; i < scnsNum; i++) 
+		for (int i = 0; i < scnTypesNum; i++) 
 		{
-			FillOneScnData (scnsPath[i]);
+			FillOneScnTypeFolder (scnTypesFolderPath[i]);
 		}
 
 	}
 
-	static void FillOneScnData(string scnSubFolderPath)
+	//填充一个类型(文件夹下)的场景
+	static void FillOneScnTypeFolder(string scnTypePath)
 	{
+		string scnType = EditorHelper.GetFileNameFromPath(scnTypePath);
 
-		//首先获取类型
-		string scnSubFolerName = EditorHelper.GetFileNameFromPath(scnSubFolderPath);
-		string[] scnTypeAndName = scnSubFolerName.Split ('_');
-		string scnType = scnTypeAndName[0];
-		string scnName = scnTypeAndName[1];
+		string[] scnsPath = EditorHelper.GetSubFolderPaths(scnTypePath);	
+
+		int scnNum = scnsPath.Length;
+
+		for (int i = 0; i < scnNum; i++) 
+		{
+			FillOneScn (scnsPath[i],scnType);
+		}
+
+	}
+
+	//填充一个具体场景
+	static void FillOneScn(string scnPath,string scnType)
+	{
+		string scnName = EditorHelper.GetFileNameFromPath(scnPath);
 
 		//创建场景临时对象
-		string scnPrefabPath = scnSubFolderPath+"/scn.prefab";
+		string scnPrefabPath = scnPath+"/scn.prefab";
 		if (!EditorHelper.BeFileExist (scnPrefabPath)) {
 			Debug.LogError ("MeEditor.FillOneScnData 未找到scnPrefa  path:"+scnPrefabPath+" 填充场景数据失败");
 			return;
@@ -158,11 +178,12 @@ public class MeEditor : MonoBehaviour {
 
 		//根据不同类型类型场景分别填充数据
 
-		FillDiffScnData (scnType,scnName,scnSubFolderPath,scnGo);
+		FillDiffScnData (scnType,scnName,scnPath,scnGo);
 
 		DestroyImmediate(scnGo);
 	}
 
+	//设置不同类型的场景数据
 	static void FillDiffScnData(string scnType,string scnName,string scnSubFolderPath,GameObject scnPrefab){
 
 		switch(scnType)
@@ -178,6 +199,7 @@ public class MeEditor : MonoBehaviour {
 
 	#region process diff ScnData
 
+	//填充3c场景
 	static void FillScnData3C(string scnType,string scnName,string scnSubFolderPath,GameObject scnPrefab)
 	{
 
@@ -193,7 +215,7 @@ public class MeEditor : MonoBehaviour {
 
 		//获取或创建ScnData
 		string scnDataAssetPath = scnSubFolderPath + "/scnData.asset";
-
+		//Debug.LogError ("------>scnDataAssetPath:"+scnDataAssetPath);
 		string scnDataAssetReletivePath = EditorHelper.ChangeToRelativePath (scnDataAssetPath);
 
 

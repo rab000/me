@@ -254,7 +254,7 @@ public static class EditorHelper{
 	/// <param name="bundleName">Bundle name.bundle名</param>
 	/// <param name="bundleVariant">Bundle variant.后缀</param>
 	public static void SetAssetBundleName(string path,string bundleName,string bundleVariant = "n"){
-		//Debug.LogError ("SetAssetBundleName--->path:"+path);
+		Debug.LogError ("SetAssetBundleName--->path:"+path);
 		if (path.EndsWith (".meta"))
 			return;
 
