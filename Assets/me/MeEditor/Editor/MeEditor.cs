@@ -104,12 +104,14 @@ public class MeEditor : MonoBehaviour {
 
 		int scnTypesNum = scnTypesFolderPath.Length;
 
+		//遍历所有场景类型文件夹
 		for (int i = 0; i < scnTypesNum; i++) 
 		{
 			string scnType = EditorHelper.GetFileNameFromPath(scnTypesFolderPath [i],true);
 			
 			string[] scnsPath =  EditorHelper.GetSubFolderPaths(scnTypesFolderPath[i]);	
 
+			//遍历所有场景文件夹
 			for (int j = 0; j < scnsPath.Length; j++)
 			{
 				string scnName = EditorHelper.GetFileNameFromPath(scnsPath [j],true);
@@ -138,28 +140,22 @@ public class MeEditor : MonoBehaviour {
 
 		int scnTypesNum = scnTypesFolderPath.Length;
 
+		//遍历所有场景类型文件夹
 		for (int i = 0; i < scnTypesNum; i++) 
 		{
-			FillOneScnTypeFolder (scnTypesFolderPath[i]);
+			string scnTypePath = scnTypesFolderPath [i];
+			string scnType = EditorHelper.GetFileNameFromPath(scnTypePath);
+			string[] scnsPath = EditorHelper.GetSubFolderPaths(scnTypePath);	
+			int scnNum = scnsPath.Length;
+			//遍历所有场景文件夹
+			for (int j = 0; j < scnNum; j++) 
+			{
+				FillOneScn (scnsPath[j],scnType);
+			}
 		}
 
 	}
 
-	//填充一个类型(文件夹下)的场景
-	static void FillOneScnTypeFolder(string scnTypePath)
-	{
-		string scnType = EditorHelper.GetFileNameFromPath(scnTypePath);
-
-		string[] scnsPath = EditorHelper.GetSubFolderPaths(scnTypePath);	
-
-		int scnNum = scnsPath.Length;
-
-		for (int i = 0; i < scnNum; i++) 
-		{
-			FillOneScn (scnsPath[i],scnType);
-		}
-
-	}
 
 	//填充一个具体场景
 	static void FillOneScn(string scnPath,string scnType)
