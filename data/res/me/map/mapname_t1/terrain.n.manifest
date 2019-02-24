@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 782697028
+CRC: 2055271734
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -36,5 +36,5 @@ ClassTypes:
 - Class: 115
   Script: {instanceID: 0}
 Assets:
-- Assets/me/Resources/map/mapname_t1/terrain.prefab
+- Assets/me/Resources/res/map/mapname_t1/terrain.prefab
 Dependencies: []

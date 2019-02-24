@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 3804083173
+CRC: 572721641
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -14,5 +14,5 @@ ClassTypes:
 - Class: 4
   Script: {instanceID: 0}
 Assets:
-- Assets/me/Resources/map/mapname_t1/obj.prefab
+- Assets/me/Resources/res/map/mapname_t1/obj.prefab
 Dependencies: []

@@ -1,5 +1,5 @@
 ManifestFileVersion: 0
-CRC: 1711568894
+CRC: 4106646536
 Hashes:
   AssetFileHash:
     serializedVersion: 2
@@ -18,5 +18,5 @@ ClassTypes:
 - Class: 115
   Script: {instanceID: 0}
 Assets:
-- Assets/me/Resources/objs/tower.prefab
+- Assets/me/Resources/res/objs/tower.prefab
 Dependencies: []

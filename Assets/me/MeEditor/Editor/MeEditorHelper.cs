@@ -16,21 +16,21 @@ public class MeEditorHelper  {
 	// 场景资源路径
 	public static string SCN_PATH{
 		get{
-			return EDITOR_ROOT_PATH+"/Resources/scn";
+			return EDITOR_ROOT_PATH+"/Resources/res/scn";
 		}
 	}
 
 	// 地图资源路径
 	public static string MAP_PATH{
 		get{
-			return EDITOR_ROOT_PATH+"/Resources/map";
+			return EDITOR_ROOT_PATH+"/Resources/res/map";
 		}
 	}
 
 	// 地图物件路径
 	public static string OBJ_PATH{
 		get{
-			return EDITOR_ROOT_PATH+"/Resources/objs";
+			return EDITOR_ROOT_PATH+"/Resources/res/objs";
 		}
 	}
 

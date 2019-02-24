@@ -249,12 +249,13 @@ public static class EditorHelper{
 
 	/// <summary>
 	/// 设置bundle打包标签
+	/// 
 	/// </summary>
 	/// <param name="path">Path.Asset相对路径（需要后缀名）</param>
 	/// <param name="bundleName">Bundle name.bundle名</param>
 	/// <param name="bundleVariant">Bundle variant.后缀</param>
 	public static void SetAssetBundleName(string path,string bundleName,string bundleVariant = "n"){
-		Debug.LogError ("SetAssetBundleName--->path:"+path);
+		Debug.Log ("SetAssetBundleName--->path:"+path);
 		if (path.EndsWith (".meta"))
 			return;
 
@@ -267,11 +268,11 @@ public static class EditorHelper{
 		//重复设置同一bundle名称
 		string oldName = asset.assetBundleName;
 		if (oldName.Equals (bundleName)) {
-			Debug.LogError ("EditorHelper.SetAssetBundleName 重复设置同一bundle名称:"+bundleName+" 设置失败");
+			Debug.Log ("EditorHelper.SetAssetBundleName 重复设置同一bundle名称:"+bundleName+" 设置失败");
 			return;
 		}
 			
-
+		//特别注意，第一个参数bundleName需要me/map/xxx  不可以是/me/map/xxx  后者会报相对路径错误
 		asset.SetAssetBundleNameAndVariant(bundleName,bundleVariant);
 		asset.SaveAndReimport();
 
