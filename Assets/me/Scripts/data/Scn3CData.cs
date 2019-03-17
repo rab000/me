@@ -12,6 +12,8 @@ public class Scn3CData :ScriptableObject {
 
 	public List<TowerData> TowerDataList;
 
+	public List<TownData> TownDataList;
+
 	/// <summary>
 	/// 比较两个Scn3CData是否相同
 	/// </summary>
@@ -33,7 +35,10 @@ public class Scn3CData :ScriptableObject {
 
 		if (a.TowerDataList.Count != b.TowerDataList.Count)
 			return false;
-
+		
+		if (a.TownDataList.Count != b.TownDataList.Count)
+			return false;
+		
 		int count = a.TowerDataList.Count;
 
 		for (int i = 0; i < count; i++) 
@@ -45,6 +50,16 @@ public class Scn3CData :ScriptableObject {
 				return false;
 
 			if(a.TowerDataList[i].Priority != b.TowerDataList[i].Priority)
+				return false;
+		}
+
+		int townLen = a.TownDataList.Count;
+		for (int i = 0; i < townLen; i++) 
+		{
+			if (a.TownDataList [i].Camp != b.TownDataList [i].Camp)
+				return false;
+
+			if (a.TownDataList [i].Pos != b.TownDataList [i].Pos)
 				return false;
 		}
 

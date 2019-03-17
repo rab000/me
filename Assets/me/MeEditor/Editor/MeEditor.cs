@@ -227,6 +227,16 @@ public class MeEditor : MonoBehaviour {
 			scn3CData.TowerDataList.Add (td);
 		}
 
+		Town[] towns = objsTrm.GetComponentsInChildren<Town> ();
+		scn3CData.TownDataList = new List<TownData> ();
+		for (int i = 0; i < towns.Length; i++) 
+		{
+			TownData td = new TownData ();
+			td.Camp = towns[i].Camp;
+			td.Pos = towns [i].transform.position;
+			scn3CData.TownDataList.Add (td);
+		}
+
 		if (!EditorHelper.BeFileExist (scnDataAssetPath)) 
 		{
 			Debug.LogError ("MeEditor.FillScnData3C scnData 不存在，创建新数据文件 path:"+scnDataAssetPath+" ");
@@ -244,6 +254,8 @@ public class MeEditor : MonoBehaviour {
 				oldScn3CData.MapName = scn3CData.MapName;
 				oldScn3CData.TowerDataList = new List<TowerData> ();
 				oldScn3CData.TowerDataList.AddRange (scn3CData.TowerDataList.ToArray());
+				oldScn3CData.TownDataList = new List<TownData> ();
+				oldScn3CData.TownDataList.AddRange (scn3CData.TownDataList.ToArray());
 
 				Debug.LogError ("MeEditor.FillScnData3C scnName:"+oldScn3CData.ScnName+" mapName:"+oldScn3CData.MapName+" ListCount:"+oldScn3CData.TowerDataList.Count);
 
