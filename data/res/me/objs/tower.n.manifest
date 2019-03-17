@@ -1,0 +1,34 @@
+ManifestFileVersion: 0
+CRC: 1990821830
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 0f1d1f00e08f0283189319c69223664b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0a93044e60847db125a79b22c030f118
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: b9e2cd978774b4e81a278794a2e6d4d1, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+Assets:
+- Assets/me/Resources/res/objs/tower.prefab
+Dependencies: []
