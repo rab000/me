@@ -159,6 +159,74 @@ public static class EditorHelper{
 		return Directory.GetFiles(path);
 	}
 
+
+	/// <summary>
+        /// 递归删除目录
+        /// </summary>
+        /// <param name="dir">要删除的目录</param>
+        public static void DeleteFolder1(string dir)
+        {
+            foreach (string d in Directory.GetFileSystemEntries(dir))
+            {
+                if (File.Exists(d))
+                {
+                    FileInfo fi = new FileInfo(d);
+                    if (fi.Attributes.ToString().IndexOf("ReadOnly") != -1)
+                        fi.Attributes = FileAttributes.Normal;
+                    File.Delete(d);
+                }
+                else
+                {
+                    DirectoryInfo d1 = new DirectoryInfo(d);
+                    if (d1.GetFiles().Length != 0)
+                    {
+                        DeleteFolder1(d1.FullName);////递归删除子文件夹
+                    }
+                    Directory.Delete(d);
+                }
+            }
+        }
+        /// <summary>
+        /// 深度拷贝目录
+        /// </summary>
+        /// <param name="sourcePath">源目录</param>
+        /// <param name="destinationPath">目标目录</param>
+        public static void CopyDirectory(string sourcePath, string destinationPath)
+        {
+            DirectoryInfo info = new DirectoryInfo(sourcePath);
+            Directory.CreateDirectory(destinationPath);
+            foreach (FileSystemInfo fsi in info.GetFileSystemInfos())
+            {
+                string destName = Path.Combine(destinationPath, fsi.Name);
+                if (fsi is System.IO.FileInfo)
+                    File.Copy(fsi.FullName, destName);
+                else
+                {
+                    Directory.CreateDirectory(destName);
+                    CopyDirectory(fsi.FullName, destName);
+                }
+            }
+        }
+
+        /// <summary>
+        /// 得到项目的名称
+        /// </summary>
+        public static string ProjectName
+        {
+            get
+            {
+                foreach (string arg in System.Environment.GetCommandLineArgs())
+                {
+                    if (arg.StartsWith("project"))
+                    {
+                        return arg.Split('-')[1];
+                    }
+                }
+                return "test";
+            }
+        }
+
+
 	#endregion
 
 	#region File
