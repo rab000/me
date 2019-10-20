@@ -4,9 +4,32 @@ using UnityEngine;
 using UnityEditor;
 public class MeEditor : MonoBehaviour {
 
+    [MenuItem("Editor/Win")]
+    static void BuildWin()
+    {
+        BuildScn("win");
+    }
 
-	[MenuItem ("Editor/BuildScn")]
-	static void BuildScn(){
+    [MenuItem("Editor/mac")]
+    static void BuildMac()
+    {
+        BuildScn("mac");
+    }
+
+    [MenuItem("Editor/ios")]
+    static void BuildIos()
+    {
+        BuildScn("ios");
+    }
+
+    [MenuItem("Editor/android")]
+    static void BuildAndroid()
+    {
+        BuildScn("android");
+    }
+
+    //[MenuItem ("Editor/BuildScn")]
+    static void BuildScn(string platform){
 
 		//检测输出路径
 		if(!EditorHelper.BeFolderExist(MeEditorHelper.OUTPUT_RES_PATH)){
@@ -23,10 +46,25 @@ public class MeEditor : MonoBehaviour {
 		//设置scnData BundleName
 		SetScnBundleName ();
 
-		//TODO 平台处理
-		//打bundle
-		//nafio info 生成的bundle的名称，就取决于MeEditorHelper.OUTPUT_RES_PATH中最后一个文件夹的名称，比如这里就是me.manifest
-		BuildPipeline.BuildAssetBundles(MeEditorHelper.OUTPUT_RES_PATH,BuildAssetBundleOptions.None,BuildTarget.StandaloneWindows64);
+        //TODO 平台处理
+        //打bundle
+        //nafio info 生成的bundle的名称，就取决于MeEditorHelper.OUTPUT_RES_PATH中最后一个文件夹的名称，比如这里就是me.manifest
+        switch (platform)
+        {
+            case "win":
+                BuildPipeline.BuildAssetBundles(MeEditorHelper.OUTPUT_RES_PATH, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.StandaloneWindows64);
+                break;
+            case "mac":
+                BuildPipeline.BuildAssetBundles(MeEditorHelper.OUTPUT_RES_PATH, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.StandaloneOSX);
+                break;
+            case "ios":
+                BuildPipeline.BuildAssetBundles(MeEditorHelper.OUTPUT_RES_PATH, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.iOS);
+                break;
+            case "android":
+                BuildPipeline.BuildAssetBundles(MeEditorHelper.OUTPUT_RES_PATH, BuildAssetBundleOptions.UncompressedAssetBundle, BuildTarget.Android);
+                break;
+        }
+		
 
 		AssetDatabase.SaveAssets ();
 
